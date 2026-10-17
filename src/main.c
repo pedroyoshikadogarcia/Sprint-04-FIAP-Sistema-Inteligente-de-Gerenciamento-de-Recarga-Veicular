@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define MAX_SESSOES 100
+#define TAM_MODELO 30
 #define TARIFA_BASE 0.85
 
 typedef enum {
@@ -13,13 +14,14 @@ typedef enum {
 
 typedef struct {
     int id;
-    char modeloVeiculo[30];
+    char modeloVeiculo[TAM_MODELO];
     float energiaConsumida; // kWh
     float tempoRecarga;     // Minutos
     float custoTotal;       // R$
     StatusSessao status;
 } Sessao;
 
+// Protótipos das Funções
 void exibirMenu();
 void cadastrarSessao(Sessao sessoes[], int *total);
 void listarSessoes(const Sessao sessoes[], int total);
@@ -31,6 +33,7 @@ void insertionSort(Sessao sessoes[], int total, int criterio);
 void mostrarEstatisticas(const Sessao sessoes[], int total);
 const char* obterStatus(StatusSessao status);
 void limparBuffer();
+void lerStringSegura(char *dest, int tamanho);
 
 int main() {
     Sessao sessoes[MAX_SESSOES];
@@ -41,7 +44,7 @@ int main() {
         exibirMenu();
         printf("Escolha uma opcao: ");
         if (scanf("%d", &opcao) != 1) {
-            printf("\n[ERRO] Entrada invalida! Digite apenas numeros.\n");
+            printf("\n[ERRO] Entrada invalida ou fim de arquivo detectado!\n");
             limparBuffer();
             continue;
         }
@@ -61,7 +64,22 @@ int main() {
 }
 
 void limparBuffer() {
-    while (getchar() != '\n');
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+void lerStringSegura(char *dest, int tamanho) {
+    limparBuffer();
+    if (fgets(dest, tamanho, stdin) != NULL) {
+        size_t len = strlen(dest);
+        if (len > 0 && dest[len - 1] == '\n') {
+            dest[len - 1] = '\0';
+        } else {
+            limparBuffer();
+        }
+    } else {
+        dest[0] = '\0';
+    }
 }
 
 const char* obterStatus(StatusSessao status) {
@@ -96,9 +114,9 @@ void cadastrarSessao(Sessao sessoes[], int *total) {
     nova.id = *total + 1;
 
     printf("\n--- Nova Sessao de Recarga (ID: %d) ---\n", nova.id);
-    printf("Modelo do Veiculo: ");
-    limparBuffer();
-    scanf(" %[^\n]", nova.modeloVeiculo);
+    
+    printf("Modelo do Veiculo (max 29 caracteres): ");
+    lerStringSegura(nova.modeloVeiculo, TAM_MODELO);
 
     printf("Energia Consumida (kWh): ");
     while (scanf("%f", &nova.energiaConsumida) != 1 || nova.energiaConsumida <= 0) {
