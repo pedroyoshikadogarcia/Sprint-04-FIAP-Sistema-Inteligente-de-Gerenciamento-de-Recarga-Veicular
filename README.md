@@ -1,4 +1,4 @@
-##ChargeGrid Intelligence — Sprint 4
+## ChargeGrid Intelligence — Sprint 4
 
 ---
 
