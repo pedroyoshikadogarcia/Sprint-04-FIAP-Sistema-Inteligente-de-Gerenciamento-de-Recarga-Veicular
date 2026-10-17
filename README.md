@@ -26,12 +26,14 @@ Módulo de Estatísticas e Relatório: Consolidação da quantidade de recargas,
 
 **Estrutura do Repositório**
 
+```text
 chargegrid-intelligence/
 ├── src/
-│   └── main.c                        # Código-fonte principal em C
+│   └── main.c
 ├── docs/
-│   └── documento_tecnico_sprint3.pdf # Documentação técnica e análise Big-O
-└── README.md                         # Guia do projeto
+│   └── documento_tecnico_sprint3_toshio_v2.pdf
+└── README.md
+```      
 
 
 **Como Compilar e Executar**
